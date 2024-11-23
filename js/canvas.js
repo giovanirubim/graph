@@ -59,7 +59,7 @@ function drawNode(node) {
 }
 
 function drawEdge({ source: a, neighbor: b, cost }, graph) {
-	const { directed } = config
+	const { directed, weighted } = config
 	const [ ax, ay ] = projectNode(a)
 	const [ bx, by ] = projectNode(b)
 
@@ -124,10 +124,12 @@ function drawEdge({ source: a, neighbor: b, cost }, graph) {
 		ctx.fill()
 	}
 
-	ctx.font = projectSize(fontSize) + 'px monospace'
-	ctx.textAlign = 'center'
-	ctx.textBaseline = 'middle'
-	ctx.fillText(cost, tx, ty)
+	if (weighted) {
+		ctx.font = projectSize(fontSize) + 'px monospace'
+		ctx.textAlign = 'center'
+		ctx.textBaseline = 'middle'
+		ctx.fillText(cost, tx, ty)
+	}
 }
 
 export function clear() {

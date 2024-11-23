@@ -101,5 +101,5 @@ function graph3() {
 }
 
 export function buildGraph() {
-	return graph2()
+	return graph3()
 }
