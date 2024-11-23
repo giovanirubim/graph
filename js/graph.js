@@ -1,3 +1,4 @@
+import { colors } from "./colors.js"
 import { config } from "./config.js"
 
 export class Node {
@@ -6,7 +7,7 @@ export class Node {
 		this.x = x
 		this.y = y
 		this.label = null
-		this.color = null
+		this.color = colors.blank
 		this.edges = []
 	}
 	get cost() {

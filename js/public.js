@@ -41,7 +41,7 @@ const pause = () => new Promise(fn => {
 
 async function start() {
 	resizeCanvas()
-	const it = run(graph, root, list)
+	const it = run(graph, list)
 	for (;;) {
 		await pause()
 		const { done } = it.next()
@@ -50,11 +50,10 @@ async function start() {
 	}
 }
 
-export function main({ config, graph: graphObj, root: rootNode, run: runFn }) {
-	graph = graphObj
-	run = runFn
-	root = rootNode
+export function main({ config, buildGraph, run: runFn }) {
 	setConfig(config)
 	reloadColors()
+	graph = buildGraph()
+	run = runFn
 	start()
 }
