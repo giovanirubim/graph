@@ -1,4 +1,3 @@
-import { colors } from "./colors.js"
 import { config } from "./config.js"
 
 export class Node {
