@@ -166,6 +166,9 @@ export function drawGraph(graph) {
 	for (const a in edgeMap) {
 		const map = edgeMap[a]
 		for (const b in map) {
+			if (!config.directed && b < a) {
+				continue
+			}
 			const edge = map[b]
 			drawEdge(edge, graph)
 		}
