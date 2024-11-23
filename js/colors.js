@@ -11,7 +11,7 @@ const light = {
 
 const dark = {
 	background: '#222',
-	blank: '#333',
+	blank: '#444',
 	line: '#fff',
 	blue: '#07f',
 	orange: '#c52',

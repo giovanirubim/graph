@@ -43,7 +43,7 @@ function drawNode(node) {
 	ctx.fill()
 	ctx.stroke()
 
-	const gap = node.label != null ? projectSize(nodeRadius*0.6) : 0
+	const gap = node.label != null ? projectSize(nodeRadius*0.65) : 0
 
 	ctx.font = projectSize(fontSize) + 'px monospace'
 	ctx.textAlign = 'center'
@@ -52,9 +52,28 @@ function drawNode(node) {
 	ctx.fillText(node.val, x, y - gap*0.3)
 
 	if (node.label != null) {
+		const ty = y + gap*0.7
+		const text = normalize(node.label)
+
 		ctx.font = projectSize(fontSize*0.8) + 'px monospace'
-		ctx.strokeStyle = node.color
-		ctx.fillText(normalize(node.label), x, y + gap*0.7)
+		const metrics = ctx.measureText(text)
+		const lw = projectSize(8)
+		const width = metrics.width - lw*0.5
+		const h1 = metrics.actualBoundingBoxAscent - lw*0.25
+		const h2 = metrics.actualBoundingBoxDescent - lw*0.25
+		const height = h1 + h2
+		
+		ctx.strokeStyle = colors.blank
+		ctx.fillStyle = colors.blank
+		ctx.beginPath()
+		ctx.rect(x - width/2, ty - h1, width, height)
+		ctx.lineJoin = 'round'
+		ctx.lineWidth = lw
+		ctx.stroke()
+		ctx.fill()
+
+		ctx.fillStyle = colors.line
+		ctx.fillText(text, x, ty)
 	}
 }
 
@@ -169,11 +188,7 @@ function normalize(value) {
 }
 
 export function drawList(list) {
-	const text = (
-		'[ ' +
-		list.values().map(normalize).join(', ') +
-		' ]'
-	).replace('  ', ' ')
+	const text = `list: [${list.values().map(normalize).join(', ')}]`
 	ctx.fillStyle = colors.line
 	ctx.textBaseline = 'top'
 	ctx.textAlign = 'left'
@@ -185,7 +200,7 @@ export function drawList(list) {
 canvas.addEventListener('dblclick', e => {
 	const x = (e.offsetX - canvas.width/2)/scale
 	const y = (canvas.height/2 - e.offsetY)/scale
-	console.log(`.add({ val: <value>, x: ${Math.round(x)}, y: ${Math.round(y)} })`)
+	console.log(`.add({ val: '', x: ${Math.round(x)}, y: ${Math.round(y)} })`)
 })
 
 export function resize(width, height) {

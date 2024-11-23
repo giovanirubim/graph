@@ -100,6 +100,27 @@ function graph3() {
 	return graph
 }
 
+function graph4() {
+	return new Graph()
+		.add({ val: 'O', x: -24, y: -165 })
+		.add({ val: 'A', x: -134, y: -85 })
+		.add({ val: 'B', x: -153, y: 33 })
+		.add({ val: 'C', x: -101, y: 133 })
+		.add({ val: 'D', x: 95, y: -125 })
+		.add({ val: 'E', x: 140, y: -29 })
+		.add({ val: 'F', x: 128, y: 81 })
+		.add({ val: 'T', x: 5, y: 158 })
+		.connect('O', 'T', 8)
+		.connect('O', 'A', 1)
+		.connect('A', 'B', 1)
+		.connect('B', 'C', 1)
+		.connect('C', 'T', 2)
+		.connect('O', 'D', 1)
+		.connect('D', 'E', 1)
+		.connect('E', 'F', 1)
+		.connect('F', 'T', 1)
+}
+
 export function buildGraph() {
-	return graph3()
+	return graph4()
 }

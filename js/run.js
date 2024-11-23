@@ -1,30 +1,27 @@
 import { colors } from "./colors.js";
 
 export function* run(graph, root, list) {
-	for (const node of graph.nodes) {
-		node.cost = Infinity
-	}
-
-	list.heappush([ 0, root ])
-	root.cost = 0
+	list.heappush([ 0, root, '*' ])
 	root.color = colors.orange
+	yield
 
 	while (list.size > 0) {
-		const [ _, node ] = list.heappop()
-		node.color = colors.blue
-		yield
+		const [ path_cost, node, prev ] = list.heappop()
+		
+		if (node.color === colors.blue) {
+			yield
+			continue
+		} else {
+			node.color = colors.blue
+			node.cost = [ path_cost, prev ]
+			yield
+		}
 
 		for (const { neighbor, cost } of node.edges) {
-			if (neighbor.color === colors.blue) {
-				continue
-			}
-			const new_cost = node.cost + cost
-			if (new_cost < neighbor.cost) {
-				neighbor.color = colors.orange
-				neighbor.cost = new_cost
-				list.heappush([ new_cost, neighbor ])
-				yield
-			}
+			const new_cost = path_cost + cost
+			neighbor.color = colors.orange
+			list.heappush([ new_cost, neighbor, node ])
+			yield
 		}
 	}
 }
