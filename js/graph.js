@@ -7,7 +7,7 @@ export class Node {
 		this.x = x
 		this.y = y
 		this.label = null
-		this.color = colors.blank
+		this.color = null
 		this.edges = []
 	}
 	get cost() {

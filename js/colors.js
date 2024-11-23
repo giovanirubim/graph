@@ -19,3 +19,10 @@ const dark = {
 }
 
 export const colors = config.dark_theme ? dark : light
+
+export function reloadColors() {
+	const actual = config.dark_theme ? dark : light
+	for (const key in actual) {
+		colors[key] = actual[key]
+	}
+}

@@ -11,6 +11,7 @@ const pathGap = 7
 const costGap = 8
 const curveGap = 15
 const lineWidth = 1.5
+
 let scale = 1
 
 function updateScale() {
@@ -33,7 +34,7 @@ function projectSize(size) {
 function drawNode(node) {
 	const [ x, y ] = projectNode(node)
 	ctx.lineWidth = projectSize(lineWidth)
-	ctx.fillStyle = node.color
+	ctx.fillStyle = node.color ?? colors.blank
 	ctx.strokeStyle = colors.line
 
 	const rad = projectSize(nodeRadius)
