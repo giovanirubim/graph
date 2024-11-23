@@ -37,7 +37,9 @@ const pause = () => new Promise(fn => {
 		nextHandler = fn
 	}
 })
+
 const it = run(graph, graph.nodes[0], list)
+
 for (;;) {
 	await pause()
 	const { done } = it.next()
