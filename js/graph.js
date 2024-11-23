@@ -46,18 +46,18 @@ export class Graph {
 		return this.getEdge(a, b) != null
 	}
 	connect(a, b, cost = 1) {
-		if (this.isConnected(a, b)) {
+		if (this.isConnected(a, b))
 			return this
-		}
 		const node_a = this.getNode(a)
 		const node_b = this.getNode(b)
-		if (!config.weighted) cost = 1
+		if (!config.weighted)
+			cost = 1
 		const edge = new Edge(node_a, node_b, cost)
-		node_a.edges.push(edge)
-		const map = this.edgeMap[a] ?? (this.edgeMap[a] = {})
-		map[b] = edge
+		node_a.edges.push(edge);
+		(this.edgeMap[a] ?? (this.edgeMap[a] = {}))[b] = edge
 		this.edges.push([ node_a, node_b, cost ])
-		if (!config.directed) this.connect(a, b, cost)
+		if (!config.directed)
+			this.connect(a, b, cost)
 		return this
 	}
 	getNode(val) {

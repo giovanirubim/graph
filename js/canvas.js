@@ -7,8 +7,9 @@ const ctx = canvas.getContext('2d')
 
 const nodeRadius = 20
 const fontSize = 15
-const pathGap = 10
-const costGap = 12
+const pathGap = 7
+const costGap = 8
+const curveGap = 15
 const lineWidth = 1.5
 let scale = 1
 
@@ -57,60 +58,76 @@ function drawNode(node) {
 	}
 }
 
-function drawEdge([ a, b, cost ]) {
-	if (!config.directed && a.val < b.val) {
-		return
-	}
-
+function drawEdge({ source: a, neighbor: b, cost }, graph) {
+	const { directed } = config
 	const [ ax, ay ] = projectNode(a)
 	const [ bx, by ] = projectNode(b)
+
 	const dx = bx - ax
 	const dy = by - ay
 	const len = Math.sqrt(dx**2 + dy**2)
 	const nx = dx/len
 	const ny = dy/len
-	const offset = config.directed ? projectSize(pathGap*0.5) : 0
+
 	const rad = projectSize(nodeRadius)
-	const sx = ax + nx*rad + offset*ny
-	const sy = ay + ny*rad - offset*nx
-	const ex = bx - nx*rad + offset*ny
-	const ey = by - ny*rad - offset*nx
-	const tipSize = projectSize(7)
-	const cx = ex - nx*tipSize
-	const cy = ey - ny*tipSize
 	const gap = projectSize(costGap)
-	const mid = Math.sqrt((sx - ex)**2 + (sy - ey)**2)*0.4
-	const tx = sx + nx*mid + ny*gap
-	const ty = sy + ny*mid - nx*gap
+	let sx = ax + nx*rad
+	let sy = ay + ny*rad
+	let ex = bx - nx*rad
+	let ey = by - ny*rad
+	let px = ax + dx*0.4
+	let py = ay + dy*0.4
+	
+	const curved = directed && graph.isConnected(b.val, a.val)
+	
+	if (curved) {
+		const gap = projectSize(pathGap)*0.5
+		const offset = projectSize(curveGap)*0.5
+		sx += ny*gap
+		sy -= nx*gap
+		ex += ny*gap
+		ey -= nx*gap
+		px += ny*(gap + offset)
+		py -= nx*(gap + offset)
+	}
+
+	let tx = px + ny*gap
+	let ty = py - nx*gap
 
 	ctx.lineWidth = projectSize(lineWidth)
-	ctx.strokeStyle = colors.line
 	ctx.fillStyle = colors.line
+	ctx.strokeStyle = colors.line
+	ctx.beginPath()
+	ctx.moveTo(sx, sy)
+	if (curved) {
+		ctx.bezierCurveTo(sx, sy, px, py, ex, ey)
+	} else {
+		ctx.lineTo(ex, ey)
+	}
+	ctx.stroke()
 
-	if (config.directed) {
-		ctx.beginPath()
-		ctx.moveTo(sx, sy)
-		ctx.bezierCurveTo(sx, sy, tx, ty, cx, cy)
-		ctx.stroke()
-
+	if (directed) {
+		const c1 = projectSize(4.5)
+		const c2 = projectSize(9.0)
+		let vx = nx, vy = ny
+		if (curved) {
+			const dx = ex - px
+			const dy = ey - py
+			const len = Math.sqrt(dx**2 + dy**2)
+			vx = dx/len
+			vy = dy/len
+		}
 		ctx.beginPath()
 		ctx.moveTo(ex, ey)
-		ctx.lineTo(cx - ny*tipSize*0.5, cy + nx*tipSize*0.5)
-		ctx.lineTo(cx + ny*tipSize*0.5, cy - nx*tipSize*0.5)
+		ctx.lineTo(ex - vx*c2 + vy*c1, ey - vy*c2 - vx*c1)
+		ctx.lineTo(ex - vx*c2 - vy*c1, ey - vy*c2 + vx*c1)
 		ctx.fill()
-	} else {
-		ctx.beginPath()
-		ctx.moveTo(ax, ay)
-		ctx.lineTo(bx, by)
-		ctx.stroke()
 	}
 
-	if (config.weighted) {
-		ctx.textAlign = 'center'
-		ctx.textBaseline = 'middle'
-		ctx.font = projectSize(fontSize) + 'px monospace'
-		ctx.fillText(cost, tx, ty)
-	}
+	ctx.font = projectSize(fontSize) + 'px monospace'
+	ctx.textAlign = 'center'
+	ctx.textBaseline = 'middle'
+	ctx.fillText(cost, tx, ty)
 }
 
 export function clear() {
@@ -122,13 +139,13 @@ export function clear() {
 	}
 }
 
-export function drawGraph({ edgeMap, nodes }) {
+export function drawGraph(graph) {
+	const { edgeMap, nodes } = graph
 	for (const a in edgeMap) {
-		const node = nodes.find(node => node.val == a)
 		const map = edgeMap[a]
 		for (const b in map) {
 			const edge = map[b]
-			drawEdge([ node, edge.neighbor, edge.cost ])
+			drawEdge(edge, graph)
 		}
 	}
 	for (const node of nodes) {
