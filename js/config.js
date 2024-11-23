@@ -1,5 +1,5 @@
 export const config = {
-	directed: true,
+	directed: false,
 	weighted: true,
 	dark_theme: true,
 	transparent_background: false,

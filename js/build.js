@@ -1,5 +1,5 @@
 import { graphs } from "./graphs.js";
 
 export function buildGraph() {
-	return graphs.build1()
+	return graphs.build3()
 }
