@@ -21,9 +21,10 @@ export function* run(graph, list) {
 
 		for (const { neighbor, cost } of node.edges) {
 			const new_cost = path_cost + cost
-			if (neighbor.color !== colors.blue) {
-				neighbor.color = colors.orange
+			if (neighbor.color === colors.blue) {
+				continue
 			}
+			neighbor.color = colors.orange
 			list.heappush([ new_cost, neighbor ])
 			yield
 		}

@@ -1,6 +1,6 @@
 export const config = {
 	directed: false,
-	weighted: true,
+	weighted: false,
 	dark_theme: true,
 	transparent_background: false,
 	animate: 500, // set to zero to advance step by step with the arrow right key
