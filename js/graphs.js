@@ -19,7 +19,7 @@ function build1() {
 }
 
 function build2() {
-	return graph2 = new Graph()
+	return new Graph()
 	.add({ val: 'O', x: -221, y: 54 })
 	.add({ val: 'A', x: -101, y: 168 })
 	.add({ val: 'B', x: -87, y: 5 })
@@ -99,7 +99,7 @@ function build3() {
 }
 
 function build4() {
-	new Graph()
+	return new Graph()
 	.add({ val: 'O', x: -24, y: -165 })
 	.add({ val: 'A', x: -134, y: -85 })
 	.add({ val: 'B', x: -153, y: 33 })
