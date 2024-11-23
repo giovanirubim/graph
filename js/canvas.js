@@ -114,15 +114,24 @@ function drawEdge([ a, b, cost ]) {
 }
 
 export function clear() {
-	ctx.fillStyle = colors.background
-	ctx.fillRect(0, 0, canvas.width, canvas.height)
+	if (config.transparent_background) {
+		ctx.clearRect(0, 0, canvas.width, canvas.height)
+	} else {
+		ctx.fillStyle = colors.background
+		ctx.fillRect(0, 0, canvas.width, canvas.height)
+	}
 }
 
-export function drawGraph(graph) {
-	for (const edge of graph.edges) {
-		drawEdge(edge)
+export function drawGraph({ edgeMap, nodes }) {
+	for (const a in edgeMap) {
+		const node = nodes.find(node => node.val == a)
+		const map = edgeMap[a]
+		for (const b in map) {
+			const edge = map[b]
+			drawEdge([ node, edge.neighbor, edge.cost ])
+		}
 	}
-	for (const node of graph.nodes) {
+	for (const node of nodes) {
 		drawNode(node)
 	}
 }

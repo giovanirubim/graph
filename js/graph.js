@@ -19,7 +19,8 @@ export class Node {
 }
 
 class Edge {
-	constructor(neighbor, cost) {
+	constructor(source, neighbor, cost) {
+		this.source = source
 		this.neighbor = neighbor
 		this.cost = cost
 	}
@@ -28,41 +29,38 @@ class Edge {
 export class Graph {
 	constructor() {
 		this.nodes = []
+		this.nodeMap = {}
 		this.edges = []
+		this.edgeMap = {}
 	}
 	add({ val, x, y }) {
-		this.nodes.push(new Node(val, x, y))
+		const node = new Node(val, x, y)
+		this.nodes.push(node)
+		this.nodeMap[val] = node
 		return this
 	}
-	isConnected(node_a, node_b) {
-		const edge = this.edges.find((edge) => {
-			const [ a, b ] = edge
-			return a === node_a && b === node_b
-		})
-		return edge != null
+	getEdge(a, b) {
+		return this.edgeMap[a]?.[b]
 	}
-	connect({ a, b, cost = 1 }) {
-		const node_a = this.get(a)
-		const node_b = this.get(b)
-		if (this.isConnected(node_a, node_b)) {
+	isConnected(a, b) {
+		return this.getEdge(a, b) != null
+	}
+	connect(a, b, cost = 1) {
+		if (this.isConnected(a, b)) {
 			return this
 		}
-		if (!config.weighted) {
-			cost = 1
-		}
-		node_a.edges.push(new Edge(node_b, cost))
+		const node_a = this.getNode(a)
+		const node_b = this.getNode(b)
+		if (!config.weighted) cost = 1
+		const edge = new Edge(node_a, node_b, cost)
+		node_a.edges.push(edge)
+		const map = this.edgeMap[a] ?? (this.edgeMap[a] = {})
+		map[b] = edge
 		this.edges.push([ node_a, node_b, cost ])
-		if (!config.directed) {
-			this.connect({ a: b, b: a, cost })
-		}
+		if (!config.directed) this.connect(a, b, cost)
 		return this
 	}
-	connectBoth({ a, b, cost }) {
-		this.connect({ a, b, cost })
-		this.connect({ a: b, b: a, cost })
-		return this
-	}
-	get(val) {
-		return this.nodes.find(node => node.val === val)
+	getNode(val) {
+		return this.nodeMap[val]
 	}
 }
