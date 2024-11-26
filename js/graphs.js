@@ -121,9 +121,9 @@ function build4() {
 
 function build5() {
 	return new Graph()
+	.add({ val: '5', x: -218, y: 182 })
 	.add({ val: '7', x: 2, y: 234 })
 	.add({ val: '8', x: 15, y: -1 })
-	.add({ val: '5', x: -218, y: 182 })
 	.add({ val: '11', x: -235, y: 2 })
 	.add({ val: '2', x: -219, y: -186 })
 	.add({ val: '9', x: 23, y: -211 })
