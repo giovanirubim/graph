@@ -1,9 +1,9 @@
 export const config = {
 	directed: true,
-	weighted: true,
+	weighted: false,
 	dark_theme: true,
 	transparent_background: false,
-	animate: 500, // set to zero to advance step by step with the arrow right key
+	animate: 0, // set to zero to advance step by step with the arrow right key
 }
 
 export function setConfig(props) {

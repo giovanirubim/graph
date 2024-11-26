@@ -119,9 +119,31 @@ function build4() {
 	.connect('F', 'T', 1)
 }
 
+function build5() {
+	return new Graph()
+	.add({ val: '7', x: 2, y: 234 })
+	.add({ val: '8', x: 15, y: -1 })
+	.add({ val: '5', x: -218, y: 182 })
+	.add({ val: '11', x: -235, y: 2 })
+	.add({ val: '2', x: -219, y: -186 })
+	.add({ val: '9', x: 23, y: -211 })
+	.add({ val: '3', x: 255, y: 211 })
+	.add({ val: '10', x: 258, y: -130 })
+	.connect('5', '11')
+	.connect('7', '11')
+	.connect('7', '8')
+	.connect('3', '8')
+	.connect('3', '10')
+	.connect('8', '9')
+	.connect('11', '2')
+	.connect('11', '9')
+	.connect('11', '10')
+}
+
 export const graphs = {
 	build1,
 	build2,
 	build3,
 	build4,
+	build5,
 }
